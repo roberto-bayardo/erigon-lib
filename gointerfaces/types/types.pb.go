@@ -695,6 +695,124 @@ func (x *ExecutionPayloadV2) GetWithdrawals() []*Withdrawal {
 	return nil
 }
 
+type ExecutionPayloadV3 struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Payload       *ExecutionPayloadV2 `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
+	ExcessDataGas *H256               `protobuf:"bytes,2,opt,name=excessDataGas,proto3" json:"excessDataGas,omitempty"`
+}
+
+func (x *ExecutionPayloadV3) Reset() {
+	*x = ExecutionPayloadV3{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_types_types_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ExecutionPayloadV3) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExecutionPayloadV3) ProtoMessage() {}
+
+func (x *ExecutionPayloadV3) ProtoReflect() protoreflect.Message {
+	mi := &file_types_types_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExecutionPayloadV3.ProtoReflect.Descriptor instead.
+func (*ExecutionPayloadV3) Descriptor() ([]byte, []int) {
+	return file_types_types_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ExecutionPayloadV3) GetPayload() *ExecutionPayloadV2 {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+func (x *ExecutionPayloadV3) GetExcessDataGas() *H256 {
+	if x != nil {
+		return x.ExcessDataGas
+	}
+	return nil
+}
+
+type BlobsBundleV1 struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BlockHash *H256    `protobuf:"bytes,1,opt,name=blockHash,proto3" json:"blockHash,omitempty"`
+	Kzgs      [][]byte `protobuf:"bytes,2,rep,name=kzgs,proto3" json:"kzgs,omitempty"`
+	Blobs     [][]byte `protobuf:"bytes,3,rep,name=blobs,proto3" json:"blobs,omitempty"`
+}
+
+func (x *BlobsBundleV1) Reset() {
+	*x = BlobsBundleV1{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_types_types_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BlobsBundleV1) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BlobsBundleV1) ProtoMessage() {}
+
+func (x *BlobsBundleV1) ProtoReflect() protoreflect.Message {
+	mi := &file_types_types_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BlobsBundleV1.ProtoReflect.Descriptor instead.
+func (*BlobsBundleV1) Descriptor() ([]byte, []int) {
+	return file_types_types_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *BlobsBundleV1) GetBlockHash() *H256 {
+	if x != nil {
+		return x.BlockHash
+	}
+	return nil
+}
+
+func (x *BlobsBundleV1) GetKzgs() [][]byte {
+	if x != nil {
+		return x.Kzgs
+	}
+	return nil
+}
+
+func (x *BlobsBundleV1) GetBlobs() [][]byte {
+	if x != nil {
+		return x.Blobs
+	}
+	return nil
+}
+
 type NodeInfoPorts struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -707,7 +825,7 @@ type NodeInfoPorts struct {
 func (x *NodeInfoPorts) Reset() {
 	*x = NodeInfoPorts{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_types_proto_msgTypes[10]
+		mi := &file_types_types_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -720,7 +838,7 @@ func (x *NodeInfoPorts) String() string {
 func (*NodeInfoPorts) ProtoMessage() {}
 
 func (x *NodeInfoPorts) ProtoReflect() protoreflect.Message {
-	mi := &file_types_types_proto_msgTypes[10]
+	mi := &file_types_types_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -733,7 +851,7 @@ func (x *NodeInfoPorts) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NodeInfoPorts.ProtoReflect.Descriptor instead.
 func (*NodeInfoPorts) Descriptor() ([]byte, []int) {
-	return file_types_types_proto_rawDescGZIP(), []int{10}
+	return file_types_types_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *NodeInfoPorts) GetDiscovery() uint32 {
@@ -767,7 +885,7 @@ type NodeInfoReply struct {
 func (x *NodeInfoReply) Reset() {
 	*x = NodeInfoReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_types_proto_msgTypes[11]
+		mi := &file_types_types_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -780,7 +898,7 @@ func (x *NodeInfoReply) String() string {
 func (*NodeInfoReply) ProtoMessage() {}
 
 func (x *NodeInfoReply) ProtoReflect() protoreflect.Message {
-	mi := &file_types_types_proto_msgTypes[11]
+	mi := &file_types_types_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -793,7 +911,7 @@ func (x *NodeInfoReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NodeInfoReply.ProtoReflect.Descriptor instead.
 func (*NodeInfoReply) Descriptor() ([]byte, []int) {
-	return file_types_types_proto_rawDescGZIP(), []int{11}
+	return file_types_types_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *NodeInfoReply) GetId() string {
@@ -865,7 +983,7 @@ type PeerInfo struct {
 func (x *PeerInfo) Reset() {
 	*x = PeerInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_types_proto_msgTypes[12]
+		mi := &file_types_types_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -878,7 +996,7 @@ func (x *PeerInfo) String() string {
 func (*PeerInfo) ProtoMessage() {}
 
 func (x *PeerInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_types_types_proto_msgTypes[12]
+	mi := &file_types_types_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -891,7 +1009,7 @@ func (x *PeerInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerInfo.ProtoReflect.Descriptor instead.
 func (*PeerInfo) Descriptor() ([]byte, []int) {
-	return file_types_types_proto_rawDescGZIP(), []int{12}
+	return file_types_types_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *PeerInfo) GetId() string {
@@ -1155,7 +1273,7 @@ func file_types_types_proto_rawDescGZIP() []byte {
 	return file_types_types_proto_rawDescData
 }
 
-var file_types_types_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_types_types_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_types_types_proto_goTypes = []interface{}{
 	(*H128)(nil),                     // 0: types.H128
 	(*H160)(nil),                     // 1: types.H160
@@ -1167,10 +1285,12 @@ var file_types_types_proto_goTypes = []interface{}{
 	(*ExecutionPayload)(nil),         // 7: types.ExecutionPayload
 	(*Withdrawal)(nil),               // 8: types.Withdrawal
 	(*ExecutionPayloadV2)(nil),       // 9: types.ExecutionPayloadV2
-	(*NodeInfoPorts)(nil),            // 10: types.NodeInfoPorts
-	(*NodeInfoReply)(nil),            // 11: types.NodeInfoReply
-	(*PeerInfo)(nil),                 // 12: types.PeerInfo
-	(*descriptorpb.FileOptions)(nil), // 13: google.protobuf.FileOptions
+	(*ExecutionPayloadV3)(nil),       // 10: types.ExecutionPayloadV3
+	(*BlobsBundleV1)(nil),            // 11: types.BlobsBundleV1
+	(*NodeInfoPorts)(nil),            // 12: types.NodeInfoPorts
+	(*NodeInfoReply)(nil),            // 13: types.NodeInfoReply
+	(*PeerInfo)(nil),                 // 14: types.PeerInfo
+	(*descriptorpb.FileOptions)(nil), // 15: google.protobuf.FileOptions
 }
 var file_types_types_proto_depIdxs = []int32{
 	0,  // 0: types.H160.hi:type_name -> types.H128
@@ -1331,7 +1451,7 @@ func file_types_types_proto_init() {
 			}
 		}
 		file_types_types_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NodeInfoPorts); i {
+			switch v := v.(*ExecutionPayloadV3); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1343,7 +1463,7 @@ func file_types_types_proto_init() {
 			}
 		}
 		file_types_types_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NodeInfoReply); i {
+			switch v := v.(*BlobsBundleV1); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1355,6 +1475,30 @@ func file_types_types_proto_init() {
 			}
 		}
 		file_types_types_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NodeInfoPorts); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_types_types_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NodeInfoReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_types_types_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PeerInfo); i {
 			case 0:
 				return &v.state
@@ -1373,7 +1517,7 @@ func file_types_types_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_types_types_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   15,
 			NumExtensions: 3,
 			NumServices:   0,
 		},
