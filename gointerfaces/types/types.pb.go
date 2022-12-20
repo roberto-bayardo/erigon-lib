@@ -755,9 +755,11 @@ type BlobsBundleV1 struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BlockHash *H256    `protobuf:"bytes,1,opt,name=blockHash,proto3" json:"blockHash,omitempty"`
-	Kzgs      [][]byte `protobuf:"bytes,2,rep,name=kzgs,proto3" json:"kzgs,omitempty"`
-	Blobs     [][]byte `protobuf:"bytes,3,rep,name=blobs,proto3" json:"blobs,omitempty"`
+	BlockHash *H256 `protobuf:"bytes,1,opt,name=blockHash,proto3" json:"blockHash,omitempty"`
+	// TODO(eip-4844): define a protobuf message for type KZGCommitment
+	Kzgs [][]byte `protobuf:"bytes,2,rep,name=kzgs,proto3" json:"kzgs,omitempty"`
+	// TODO(eip-4844): define a protobuf message for type Blob
+	Blobs [][]byte `protobuf:"bytes,3,rep,name=blobs,proto3" json:"blobs,omitempty"`
 }
 
 func (x *BlobsBundleV1) Reset() {
