@@ -54,6 +54,10 @@ func (s *EthBackendClientDirect) EngineNewPayloadV2(ctx context.Context, in *typ
 	return s.server.EngineNewPayloadV2(ctx, in)
 }
 
+func (s *EthBackendClientDirect) EngineNewPayloadV3(ctx context.Context, in *types.ExecutionPayloadV3, opts ...grpc.CallOption) (*remote.EnginePayloadStatus, error) {
+	return s.server.EngineNewPayloadV3(ctx, in)
+}
+
 func (s *EthBackendClientDirect) EngineForkChoiceUpdatedV1(ctx context.Context, in *remote.EngineForkChoiceUpdatedRequest, opts ...grpc.CallOption) (*remote.EngineForkChoiceUpdatedReply, error) {
 	return s.server.EngineForkChoiceUpdatedV1(ctx, in)
 }
@@ -68,6 +72,14 @@ func (s *EthBackendClientDirect) EngineGetPayloadV1(ctx context.Context, in *rem
 
 func (s *EthBackendClientDirect) EngineGetPayloadV2(ctx context.Context, in *remote.EngineGetPayloadRequest, opts ...grpc.CallOption) (*types.ExecutionPayloadV2, error) {
 	return s.server.EngineGetPayloadV2(ctx, in)
+}
+
+func (s *EthBackendClientDirect) EngineGetPayloadV3(ctx context.Context, in *remote.EngineGetPayloadRequest, opts ...grpc.CallOption) (*types.ExecutionPayloadV3, error) {
+	return s.server.EngineGetPayloadV3(ctx, in)
+}
+
+func (s *EthBackendClientDirect) EngineGetBlobsBundleV1(ctx context.Context, in *remote.EngineGetBlobsBundleRequest, opts ...grpc.CallOption) (*types.BlobsBundleV1, error) {
+	return s.server.EngineGetBlobsBundleV1(ctx, in)
 }
 
 func (s *EthBackendClientDirect) Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*types.VersionReply, error) {
