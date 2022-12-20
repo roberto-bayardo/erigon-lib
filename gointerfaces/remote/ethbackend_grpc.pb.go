@@ -31,6 +31,8 @@ type ETHBACKENDClient interface {
 	EngineNewPayloadV1(ctx context.Context, in *types.ExecutionPayload, opts ...grpc.CallOption) (*EnginePayloadStatus, error)
 	// Validate and possibly execute the payload.
 	EngineNewPayloadV2(ctx context.Context, in *types.ExecutionPayloadV2, opts ...grpc.CallOption) (*EnginePayloadStatus, error)
+	// Validate and possibly execute the payload.
+	EngineNewPayloadV3(ctx context.Context, in *types.ExecutionPayloadV3, opts ...grpc.CallOption) (*EnginePayloadStatus, error)
 	// Update fork choice
 	EngineForkChoiceUpdatedV1(ctx context.Context, in *EngineForkChoiceUpdatedRequest, opts ...grpc.CallOption) (*EngineForkChoiceUpdatedReply, error)
 	// Update fork choice
@@ -39,6 +41,10 @@ type ETHBACKENDClient interface {
 	EngineGetPayloadV1(ctx context.Context, in *EngineGetPayloadRequest, opts ...grpc.CallOption) (*types.ExecutionPayload, error)
 	// Fetch Execution Payload using its ID.
 	EngineGetPayloadV2(ctx context.Context, in *EngineGetPayloadRequest, opts ...grpc.CallOption) (*types.ExecutionPayloadV2, error)
+	// Fetch Execution Payload using its ID.
+	EngineGetPayloadV3(ctx context.Context, in *EngineGetPayloadRequest, opts ...grpc.CallOption) (*types.ExecutionPayloadV3, error)
+	// Fetch the blobs bundle using its ID.
+	EngineGetBlobsBundleV1(ctx context.Context, in *EngineGetBlobsBundleRequest, opts ...grpc.CallOption) (*types.BlobsBundleV1, error)
 	// Version returns the service version number
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*types.VersionReply, error)
 	// ProtocolVersion returns the Ethereum protocol version number (e.g. 66 for ETH66).
@@ -115,6 +121,15 @@ func (c *eTHBACKENDClient) EngineNewPayloadV2(ctx context.Context, in *types.Exe
 	return out, nil
 }
 
+func (c *eTHBACKENDClient) EngineNewPayloadV3(ctx context.Context, in *types.ExecutionPayloadV3, opts ...grpc.CallOption) (*EnginePayloadStatus, error) {
+	out := new(EnginePayloadStatus)
+	err := c.cc.Invoke(ctx, "/remote.ETHBACKEND/EngineNewPayloadV3", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *eTHBACKENDClient) EngineForkChoiceUpdatedV1(ctx context.Context, in *EngineForkChoiceUpdatedRequest, opts ...grpc.CallOption) (*EngineForkChoiceUpdatedReply, error) {
 	out := new(EngineForkChoiceUpdatedReply)
 	err := c.cc.Invoke(ctx, "/remote.ETHBACKEND/EngineForkChoiceUpdatedV1", in, out, opts...)
@@ -145,6 +160,24 @@ func (c *eTHBACKENDClient) EngineGetPayloadV1(ctx context.Context, in *EngineGet
 func (c *eTHBACKENDClient) EngineGetPayloadV2(ctx context.Context, in *EngineGetPayloadRequest, opts ...grpc.CallOption) (*types.ExecutionPayloadV2, error) {
 	out := new(types.ExecutionPayloadV2)
 	err := c.cc.Invoke(ctx, "/remote.ETHBACKEND/EngineGetPayloadV2", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eTHBACKENDClient) EngineGetPayloadV3(ctx context.Context, in *EngineGetPayloadRequest, opts ...grpc.CallOption) (*types.ExecutionPayloadV3, error) {
+	out := new(types.ExecutionPayloadV3)
+	err := c.cc.Invoke(ctx, "/remote.ETHBACKEND/EngineGetPayloadV3", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eTHBACKENDClient) EngineGetBlobsBundleV1(ctx context.Context, in *EngineGetBlobsBundleRequest, opts ...grpc.CallOption) (*types.BlobsBundleV1, error) {
+	out := new(types.BlobsBundleV1)
+	err := c.cc.Invoke(ctx, "/remote.ETHBACKEND/EngineGetBlobsBundleV1", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -297,6 +330,8 @@ type ETHBACKENDServer interface {
 	EngineNewPayloadV1(context.Context, *types.ExecutionPayload) (*EnginePayloadStatus, error)
 	// Validate and possibly execute the payload.
 	EngineNewPayloadV2(context.Context, *types.ExecutionPayloadV2) (*EnginePayloadStatus, error)
+	// Validate and possibly execute the payload.
+	EngineNewPayloadV3(context.Context, *types.ExecutionPayloadV3) (*EnginePayloadStatus, error)
 	// Update fork choice
 	EngineForkChoiceUpdatedV1(context.Context, *EngineForkChoiceUpdatedRequest) (*EngineForkChoiceUpdatedReply, error)
 	// Update fork choice
@@ -305,6 +340,10 @@ type ETHBACKENDServer interface {
 	EngineGetPayloadV1(context.Context, *EngineGetPayloadRequest) (*types.ExecutionPayload, error)
 	// Fetch Execution Payload using its ID.
 	EngineGetPayloadV2(context.Context, *EngineGetPayloadRequest) (*types.ExecutionPayloadV2, error)
+	// Fetch Execution Payload using its ID.
+	EngineGetPayloadV3(context.Context, *EngineGetPayloadRequest) (*types.ExecutionPayloadV3, error)
+	// Fetch the blobs bundle using its ID.
+	EngineGetBlobsBundleV1(context.Context, *EngineGetBlobsBundleRequest) (*types.BlobsBundleV1, error)
 	// Version returns the service version number
 	Version(context.Context, *emptypb.Empty) (*types.VersionReply, error)
 	// ProtocolVersion returns the Ethereum protocol version number (e.g. 66 for ETH66).
@@ -348,6 +387,9 @@ func (UnimplementedETHBACKENDServer) EngineNewPayloadV1(context.Context, *types.
 func (UnimplementedETHBACKENDServer) EngineNewPayloadV2(context.Context, *types.ExecutionPayloadV2) (*EnginePayloadStatus, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EngineNewPayloadV2 not implemented")
 }
+func (UnimplementedETHBACKENDServer) EngineNewPayloadV3(context.Context, *types.ExecutionPayloadV3) (*EnginePayloadStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EngineNewPayloadV3 not implemented")
+}
 func (UnimplementedETHBACKENDServer) EngineForkChoiceUpdatedV1(context.Context, *EngineForkChoiceUpdatedRequest) (*EngineForkChoiceUpdatedReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EngineForkChoiceUpdatedV1 not implemented")
 }
@@ -359,6 +401,12 @@ func (UnimplementedETHBACKENDServer) EngineGetPayloadV1(context.Context, *Engine
 }
 func (UnimplementedETHBACKENDServer) EngineGetPayloadV2(context.Context, *EngineGetPayloadRequest) (*types.ExecutionPayloadV2, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EngineGetPayloadV2 not implemented")
+}
+func (UnimplementedETHBACKENDServer) EngineGetPayloadV3(context.Context, *EngineGetPayloadRequest) (*types.ExecutionPayloadV3, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EngineGetPayloadV3 not implemented")
+}
+func (UnimplementedETHBACKENDServer) EngineGetBlobsBundleV1(context.Context, *EngineGetBlobsBundleRequest) (*types.BlobsBundleV1, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EngineGetBlobsBundleV1 not implemented")
 }
 func (UnimplementedETHBACKENDServer) Version(context.Context, *emptypb.Empty) (*types.VersionReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
@@ -493,6 +541,24 @@ func _ETHBACKEND_EngineNewPayloadV2_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ETHBACKEND_EngineNewPayloadV3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(types.ExecutionPayloadV3)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ETHBACKENDServer).EngineNewPayloadV3(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/remote.ETHBACKEND/EngineNewPayloadV3",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ETHBACKENDServer).EngineNewPayloadV3(ctx, req.(*types.ExecutionPayloadV3))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ETHBACKEND_EngineForkChoiceUpdatedV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EngineForkChoiceUpdatedRequest)
 	if err := dec(in); err != nil {
@@ -561,6 +627,42 @@ func _ETHBACKEND_EngineGetPayloadV2_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ETHBACKENDServer).EngineGetPayloadV2(ctx, req.(*EngineGetPayloadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ETHBACKEND_EngineGetPayloadV3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EngineGetPayloadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ETHBACKENDServer).EngineGetPayloadV3(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/remote.ETHBACKEND/EngineGetPayloadV3",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ETHBACKENDServer).EngineGetPayloadV3(ctx, req.(*EngineGetPayloadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ETHBACKEND_EngineGetBlobsBundleV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EngineGetBlobsBundleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ETHBACKENDServer).EngineGetBlobsBundleV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/remote.ETHBACKEND/EngineGetBlobsBundleV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ETHBACKENDServer).EngineGetBlobsBundleV1(ctx, req.(*EngineGetBlobsBundleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -784,6 +886,10 @@ var ETHBACKEND_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ETHBACKEND_EngineNewPayloadV2_Handler,
 		},
 		{
+			MethodName: "EngineNewPayloadV3",
+			Handler:    _ETHBACKEND_EngineNewPayloadV3_Handler,
+		},
+		{
 			MethodName: "EngineForkChoiceUpdatedV1",
 			Handler:    _ETHBACKEND_EngineForkChoiceUpdatedV1_Handler,
 		},
@@ -798,6 +904,14 @@ var ETHBACKEND_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EngineGetPayloadV2",
 			Handler:    _ETHBACKEND_EngineGetPayloadV2_Handler,
+		},
+		{
+			MethodName: "EngineGetPayloadV3",
+			Handler:    _ETHBACKEND_EngineGetPayloadV3_Handler,
+		},
+		{
+			MethodName: "EngineGetBlobsBundleV1",
+			Handler:    _ETHBACKEND_EngineGetBlobsBundleV1_Handler,
 		},
 		{
 			MethodName: "Version",
