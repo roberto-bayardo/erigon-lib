@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/protolambda/ztyp/codec"
+	"github.com/stretchr/testify/require"
 
 	"github.com/ledgerwatch/erigon-lib/common"
 )
@@ -137,5 +138,25 @@ func TestParseBlobTxNetworkWrapper(t *testing.T) {
 	l1, l2, l3 := len(tx.BlobKZGs), len(tx.Blobs), len(tx.Tx.Message.BlobVersionedHashes)
 	if l1 != 2 || l2 != 2 || l3 != 2 {
 		t.Errorf("Expected 2 each of kzgs / blobs / hashes, got: %v %v %v", l1, l2, l3)
+	}
+
+	// Test blob verification
+	err = VerifyBlobs(tx.BlobKZGs, tx.Blobs, tx.KZGAggregatedProof, tx.Tx.Message.BlobVersionedHashes)
+	require.NoError(t, err)
+
+	// Mangle one byte in a blob and make sure verification fails
+	oldByte := tx.Blobs[0][10]
+	tx.Blobs[0][10] = 0
+	err = VerifyBlobs(tx.BlobKZGs, tx.Blobs, tx.KZGAggregatedProof, tx.Tx.Message.BlobVersionedHashes)
+	if err == nil {
+		t.Fatal("Expected error when verifying invalid blob data, got none")
+	}
+	tx.Blobs[0][10] = oldByte
+
+	// Mangle one byte in the proof and make sure verification failse
+	tx.KZGAggregatedProof[10] = 0
+	err = VerifyBlobs(tx.BlobKZGs, tx.Blobs, tx.KZGAggregatedProof, tx.Tx.Message.BlobVersionedHashes)
+	if err == nil {
+		t.Fatal("Expected error when verifying invalid aggregated proof, got none")
 	}
 }
