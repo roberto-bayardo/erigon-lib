@@ -63,6 +63,7 @@ type Config struct {
 	MergeNetsplitBlock            *big.Int `json:"mergeNetsplitBlock,omitempty"`            // Virtual fork after The Merge to use as a network splitter; see FORK_NEXT_VALUE in EIP-3675
 
 	ShanghaiTime *big.Int `json:"shanghaiTime,omitempty"` // Shanghai switch time (nil = no fork, 0 = already activated)
+	ShardingTime *big.Int `json:"shanghaiTime,omitempty"` // Proto-danksharding switch time (nil = no fork, 0 = already activated)
 	CancunTime   *big.Int `json:"cancunTime,omitempty"`   // Cancun switch time (nil = no fork, 0 = already activated)
 
 	// Parlia fork blocks
@@ -110,7 +111,7 @@ func (c *Config) String() string {
 		)
 	}
 
-	return fmt.Sprintf("{ChainID: %v, Homestead: %v, DAO: %v, DAO Support: %v, Tangerine Whistle: %v, Spurious Dragon: %v, Byzantium: %v, Constantinople: %v, Petersburg: %v, Istanbul: %v, Muir Glacier: %v, Berlin: %v, London: %v, Arrow Glacier: %v, Gray Glacier: %v, Terminal Total Difficulty: %v, Merge Netsplit: %v, Shanghai: %v, Cancun: %v, Engine: %v}",
+	return fmt.Sprintf("{ChainID: %v, Homestead: %v, DAO: %v, DAO Support: %v, Tangerine Whistle: %v, Spurious Dragon: %v, Byzantium: %v, Constantinople: %v, Petersburg: %v, Istanbul: %v, Muir Glacier: %v, Berlin: %v, London: %v, Arrow Glacier: %v, Gray Glacier: %v, Terminal Total Difficulty: %v, Merge Netsplit: %v, Shanghai: %v, Sharding: %v, Cancun: %v, Engine: %v}",
 		c.ChainID,
 		c.HomesteadBlock,
 		c.DAOForkBlock,
@@ -129,6 +130,7 @@ func (c *Config) String() string {
 		c.TerminalTotalDifficulty,
 		c.MergeNetsplitBlock,
 		c.ShanghaiTime,
+		c.ShardingTime,
 		c.CancunTime,
 		engine,
 	)
@@ -296,6 +298,11 @@ func (c *Config) IsGrayGlacier(num uint64) bool {
 // IsShanghai returns whether time is either equal to the Shanghai fork time or greater.
 func (c *Config) IsShanghai(time uint64) bool {
 	return isForked(c.ShanghaiTime, time)
+}
+
+// IsSharding returns whether time is either equal to the Shanghai fork time or greater.
+func (c *Config) IsSharding(time uint64) bool {
+	return isForked(c.ShardingTime, time)
 }
 
 // IsCancun returns whether time is either equal to the Cancun fork time or greater.
@@ -644,7 +651,7 @@ type Rules struct {
 	ChainID                                                 *big.Int
 	IsHomestead, IsTangerineWhistle, IsSpuriousDragon       bool
 	IsByzantium, IsConstantinople, IsPetersburg, IsIstanbul bool
-	IsBerlin, IsLondon, IsShanghai, IsCancun                bool
+	IsBerlin, IsLondon, IsShanghai, IsSharding, IsCancun    bool
 	IsNano, IsMoran, IsGibbs                                bool
 	IsEip1559FeeCollector                                   bool
 	IsParlia, IsStarknet, IsAura                            bool
@@ -670,6 +677,7 @@ func (c *Config) Rules(num uint64, time uint64) *Rules {
 		IsBerlin:              c.IsBerlin(num),
 		IsLondon:              c.IsLondon(num),
 		IsShanghai:            c.IsShanghai(time),
+		IsSharding:            c.IsSharding(time),
 		IsCancun:              c.IsCancun(time),
 		IsNano:                c.IsNano(num),
 		IsMoran:               c.IsMoran(num),
