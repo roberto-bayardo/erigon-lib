@@ -245,6 +245,7 @@ func (t *tuple) Deserialize(dr *codec.DecodingReader) error {
 	// an access list tuple consists of 20 bytes for the address, and then 4 bytes for the
 	// "offset", followed by the list of 32-byte storage keys.
 	scope := dr.Scope()
+	dr.Skip(scope)
 	if scope < 24 {
 		return fmt.Errorf("expected scope >= 24, got %v", scope)
 	}

@@ -60,6 +60,11 @@ var (
 	// versioned hashes, a valid aggregated kzg proof, and all other fields 0.
 	//go:embed testdata/blobtx.txt
 	blobTxNetworkWrapperHex string
+
+	// Same tx as signedBlobTxHex, only the network wrapper version with 1 empty blob and a match
+	// versioned hash.  The kzg commitment & proof are invalid.
+	//go:embed testdata/blobtx2.txt
+	blobTxNetworkWrapper2Hex string
 )
 
 func txFromHex(hexStr string, tx codec.Deserializable) error {
@@ -152,11 +157,62 @@ func TestParseBlobTxNetworkWrapper(t *testing.T) {
 		t.Fatal("Expected error when verifying invalid blob data, got none")
 	}
 	tx.Blobs[0][10] = oldByte
+}
 
-	// Mangle one byte in the proof and make sure verification failse
-	tx.KZGAggregatedProof[10] = 0
+func TestParseBlobTxNetworkWrapper2(t *testing.T) {
+	tx := BlobTxNetworkWrapper{}
+	err := txFromHex(strings.TrimSpace(blobTxNetworkWrapper2Hex), &tx)
+	if err != nil {
+		t.Fatalf("couldn't create test case: %v", err)
+	}
+	l1, l2, l3 := len(tx.BlobKZGs), len(tx.Blobs), len(tx.Tx.Message.BlobVersionedHashes)
+	if l1 != 1 || l2 != 1 || l3 != 1 {
+		t.Errorf("Expected 1 each of kzgs / blobs / hashes, got: %v %v %v", l1, l2, l3)
+	}
+
+	msg := tx.Tx.Message
+	if msg.ChainID.Uint64() != 1 {
+		t.Errorf("Expected chain id == 1, got: %v", msg.ChainID.Uint64())
+	}
+	if msg.Nonce != 10 {
+		t.Errorf("Expected nonce == 10, got: %v", msg.Nonce)
+	}
+	if msg.MaxPriorityFeePerGas.Uint64() != 42 {
+		t.Errorf("Expected MaxPriorityFeePerGas == 42, got %v", msg.MaxPriorityFeePerGas.Uint64())
+	}
+	if msg.MaxFeePerGas.Uint64() != 10 {
+		t.Errorf("Expected MaxFeePerGas == 10, got %v", msg.MaxFeePerGas.Uint64())
+	}
+	if msg.Gas != 123457 {
+		t.Errorf("Expected Gas == 123457, got %v", msg.Gas)
+	}
+	if msg.Creation == true {
+		t.Errorf("Expected !msg.Creation")
+	}
+	if msg.Value.Uint64() != 100 {
+		t.Errorf("Expected msg.Value == 100, got %v", msg.Value.Uint64())
+	}
+	if msg.DataLen != 6 {
+		t.Errorf("Expected DataLen == 6, got %v", msg.DataLen)
+	}
+	if len(msg.BlobVersionedHashes) != 1 {
+		t.Errorf("Expected 1 blob hashes, got %v", len(msg.BlobVersionedHashes))
+	}
+	if msg.AccessListAddressCount != 2 {
+		t.Errorf("Expected 2 addresses in access list, got %v", msg.AccessListAddressCount)
+	}
+	if msg.AccessListKeyCount != 3 {
+		t.Errorf("Expected 3 keys in access list, got %v", msg.AccessListKeyCount)
+	}
+
+	sig := tx.Tx.Signature
+	if sig.V != 1 {
+		t.Errorf("Expected sig.V == 1, got %v", sig.V)
+	}
+
+	// This tx has an invalid kzg proof so verification should fail
 	err = VerifyBlobs(tx.BlobKZGs, tx.Blobs, tx.KZGAggregatedProof, tx.Tx.Message.BlobVersionedHashes)
 	if err == nil {
-		t.Fatal("Expected error when verifying invalid aggregated proof, got none")
+		t.Fatalf("Expected blob verification to fail")
 	}
 }
