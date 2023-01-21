@@ -118,6 +118,7 @@ type TxSlot struct {
 	IDHash         [32]byte // Transaction hash for the purposes of using it as a transaction Id
 	Traced         bool     // Whether transaction needs to be traced throughout transaction pool code and generate debug printing
 	Creation       bool     // Set to true if "To" field of the transaction is not set
+	Blobs          int      // Set to the # of blobs contained by the transaction
 }
 
 const (
@@ -505,6 +506,7 @@ func (ctx *TxParseContext) ParseBlobTransaction(payload []byte, slot *TxSlot, se
 	slot.DataNonZeroLen = tx.dataNonZeroLen
 	slot.AlAddrCount = tx.accessListAddressCount
 	slot.AlStorCount = tx.accessListKeyCount
+	slot.Blobs = tx.numBlobHashes
 
 	err := tx.VerifyBlobs(payload)
 	if err != nil {
