@@ -1429,6 +1429,11 @@ func promote(pending *PendingPool, baseFee, queued *SubPool, pendingBaseFee uint
 	}
 }
 
+// Returns whether the given binary encoded transaction is a blob tx
+func isBlobTx(tx []byte) bool {
+	return len(tx) > 0 && tx[0] == byte(types.BlobTxType)
+}
+
 // MainLoop - does:
 // send pending byHash to p2p:
 //   - new byHash
@@ -1519,10 +1524,14 @@ func MainLoop(ctx context.Context, db kv.RwDB, coreDB kv.RoDB, p *TxPool, newTxs
 						slotsRlp = append(slotsRlp, slotRlp)
 						if p.IsLocal(hash) {
 							localTxHashes = append(localTxHashes, hash...)
-							localTxRlps = append(localTxRlps, slotRlp)
+							if !isBlobTx(slotRlp) { // don't broadcast blob txs
+								localTxRlps = append(localTxRlps, slotRlp)
+							}
 						} else {
 							remoteTxHashes = append(localTxHashes, hash...)
-							remoteTxRlps = append(remoteTxRlps, slotRlp)
+							if !isBlobTx(slotRlp) {
+								remoteTxRlps = append(remoteTxRlps, slotRlp)
+							}
 						}
 					}
 					return nil
