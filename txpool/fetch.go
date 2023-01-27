@@ -438,6 +438,7 @@ func (f *Fetch) handleStateChanges(ctx context.Context, client StateChangesClien
 
 		var unwindTxs, minedTxs types2.TxSlots
 		for _, change := range req.ChangeBatch {
+			fmt.Printf("Got state change. Direction: %v, height: %v, hash: %x, txs: %v", change.Direction, change.BlockHeight, change.BlockHash, len(change.Txs))
 			if change.Direction == remote.Direction_FORWARD {
 				minedTxs.Resize(uint(len(change.Txs)))
 				for i := range change.Txs {
