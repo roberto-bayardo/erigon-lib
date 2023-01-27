@@ -124,7 +124,10 @@ func readOffset(payload []byte, offset int, end int, prevOffset int) (int, error
 	v, err := readUint32(payload, offset)
 	r := int(v)
 	if r > end {
-		return 0, fmt.Errorf("Bad offset at %v: %v > %v", offset, v, end)
+		fmt.Printf("Bad payload: %x\nOffsets: %v %v %v\n", payload, offset, end, prevOffset)
+		msg := fmt.Sprintf("Bad offset at %v: %v > %v", offset, v, end)
+		panic(msg)
+		return 0, fmt.Errorf(msg)
 	}
 	if r < prevOffset {
 		return 0, fmt.Errorf("Bad offset at %v: %v < %v", offset, v, prevOffset)
